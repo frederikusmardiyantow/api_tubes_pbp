@@ -21,7 +21,7 @@ class AuthController extends Controller
             'email' => 'required|email:rfc,dns|unique:users',
             'password' => 'required',
             'konfirmasiPassword' => 'required',
-            'tglLahir' => 'date|required',
+            'tglLahir' => 'required',
             'telp' => 'required|number',
         ]);
 
