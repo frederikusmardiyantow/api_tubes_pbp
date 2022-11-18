@@ -19,10 +19,10 @@ class AuthController extends Controller
             'nama' => 'required',
             'username' => 'required',
             'email' => 'required|email:rfc,dns|unique:users',
-            'password' => 'required',
+            'password' => 'required|required_with:konfirmasiPassword|same:konfirmasiPassword',
             'konfirmasiPassword' => 'required',
             'tglLahir' => 'required',
-            'telp' => 'required|number',
+            'telp' => 'required',
         ]);
 
         if($validate->fails())
