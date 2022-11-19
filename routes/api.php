@@ -26,6 +26,12 @@ Route::get('user/{id}', 'Api\UserController@show');
 Route::post('user', 'Api\UserController@store');
 Route::put('user/{id}', 'Api\UserController@update');
 
+
+Route::get('note', 'Api\NoteController@index');
+Route::get('note/{id}', 'Api\NoteController@show');
+Route::post('note', 'Api\NoteController@store');
+Route::put('note/{id}', 'Api\NoteController@update');
+Route::delete('note/{id}', 'Api\NoteController@destroy');
 // Route::group(['middleware' => 'auth:api'], function(){
 //     Route::get('user', 'Api\UserController@index');
 //     Route::get('user/{id}', 'Api\UserController@show');
