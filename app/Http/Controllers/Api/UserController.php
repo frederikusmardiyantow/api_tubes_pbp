@@ -26,6 +26,34 @@ class UserController extends Controller
         ], 400);
     }
 
+    public function store(Request $request){
+        $user = $request->all();
+
+        $validate = Validator::make($user, [
+            'nama' => 'required',
+            'username' => 'required|unique:users',
+            'email' => 'required|email:rfc,dns',
+            'password' => 'required|required_with:konfirmasiPassword|same:konfirmasiPassword',
+            'konfirmasiPassword' => 'required',
+            'tglLahir' => 'required',
+            'telp' => 'required',
+        ]);
+
+        if($validate->fails())
+            return response(['message' => $validate->errors()], 400);
+        
+        // $user['password'] = bcrypt($request->password);
+        // $user['konfirmasiPassword'] = bcrypt($request->password);
+
+        $user = User::create($user);
+
+        return response([
+            'message' => 'Register Success',
+            'user' => $user
+        ], 200);
+    }
+
+
     public function show($id)
     {
         $user = User::find($id);
@@ -57,8 +85,8 @@ class UserController extends Controller
         $validate = Validator::make($updateData,[
             'nama' => 'required',
             'username' => 'required',
-            'email' => 'required|email:rfc,dns|unique:users',
-            'password' => 'required',
+            'email' => 'required|email:rfc,dns',
+            'password' => 'required|required_with:konfirmasiPassword|same:konfirmasiPassword',
             'konfirmasiPassword' => 'required',
             'tglLahir' => 'required',
             'telp' => 'required',
@@ -71,7 +99,7 @@ class UserController extends Controller
         $user->username = $updateData['username'];
         $user->email = $updateData['email'];
         $user->password = $updateData['password'];
-        $user->konformasiPassword = $updateData['konfirmasiPassword'];
+        $user->konfirmasiPassword = $updateData['konfirmasiPassword'];
         $user->tglLahir = $updateData['tglLahir'];
         $user->telp = $updateData['telp'];
 
