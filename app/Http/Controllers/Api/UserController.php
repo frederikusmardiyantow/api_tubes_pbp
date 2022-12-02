@@ -29,18 +29,19 @@ class UserController extends Controller
     public function store(Request $request){
         $user = $request->all();
 
-        $validate = Validator::make($user, [
+        // $validate = Validator::make($user,
+        $request->validate([
             'nama' => 'required',
             'username' => 'required|unique:users',
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|email',
             'password' => 'required|required_with:konfirmasiPassword|same:konfirmasiPassword',
             'konfirmasiPassword' => 'required',
-            'tglLahir' => 'required',
-            'telp' => 'required',
+            'tglLahir' => 'required|date_format:d/m/Y',
+            'telp' => 'required|min:11|max:12',
         ]);
 
-        if($validate->fails())
-            return response(['message' => $validate->errors()], 400);
+        // if($validate->fails())
+        //     return response(['message' => $validate->errors()], 400);
         
         // $user['password'] = bcrypt($request->password);
         // $user['konfirmasiPassword'] = bcrypt($request->password);
@@ -82,18 +83,20 @@ class UserController extends Controller
         }
 
         $updateData = $request->all();
-        $validate = Validator::make($updateData,[
+
+        // $validate = Validator::make($updateData,
+        $request->validate([
             'nama' => 'required',
-            'username' => 'required',
-            'email' => 'required|email:rfc,dns',
+            'username' => 'required|unique:users',
+            'email' => 'required|email',
             'password' => 'required|required_with:konfirmasiPassword|same:konfirmasiPassword',
             'konfirmasiPassword' => 'required',
-            'tglLahir' => 'required',
-            'telp' => 'required',
+            'tglLahir' => 'required|date_format:Y-m-d',
+            'telp' => 'required|min:11|max:12',
         ]);
 
-        if($validate->fails())
-            return response(['message' => $validate->errors()], 400);
+        // if($validate->fails())
+        //     return response(['message' => $validate->errors()], 400);
         
         $user->nama = $updateData['nama'];
         $user->username = $updateData['username'];

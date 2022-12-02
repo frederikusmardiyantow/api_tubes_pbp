@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register', 'Api\AuthController@register');
+Route::post('register', 'Api\UserController@store');
 //Route::post('login', 'Api\AuthController@login');
 
 Route::get('user', 'Api\UserController@index');
@@ -38,6 +38,12 @@ Route::delete('note/{id}', 'Api\NoteController@destroy');
 //     Route::post('user', 'Api\UserController@store');
 //     Route::put('user/{id}', 'Api\UserController@update');
 // });
+
+Route::get('buku', 'Api\BukuController@index');
+Route::get('buku/{id}', 'Api\BukuController@show');
+Route::post('buku', 'Api\BukuController@store');
+Route::put('buku/{id}', 'Api\BukuController@update');
+Route::delete('buku/{id}', 'Api\BukuController@destroy');
 
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', 'Api\AuthController@logout');

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Note;
-class NoteController extends Controller
+use Validator;
+use App\Models\Buku;
+
+class BukuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,21 +16,20 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $note= Note::all();
+        $buku = Buku::all();
 
-        if(count($note) > 0){
+        if(count($buku) > 0){
             return response([
                 'message' => 'Retrieve All Success',
-                'data' => $note
+                'data' => $buku
             ], 200);
         }
 
         return response([
             'message' => 'Empty',
-            'data'=> null
+            'data' => null
         ], 400);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -43,37 +42,48 @@ class NoteController extends Controller
 
         // $validate = Validator::make($storeData,
         $request->validate([
-            'title' => 'required',
-            'note' => 'required',
+            'judul' => 'required',
+            'penerbit' => 'required',
+            'tahunTerbit' => 'required|regex:/^[0-9]{4}$/',
+            'pengarang' => 'required',
+            'jumlahHalaman' => 'required|numeric|min:1',
+            'isbn' => 'required|min:13',
         ]);
 
         // if($validate->fails()){
         //     return response(['message' => $validate->errors()], 400);
         // }
-        $note = Note::create($storeData);
+        $buku = Buku::create($storeData);
 
         return response([
-            'message' => 'Add Note Success',
-            'data'=> $note
+            'message' => 'Add Buku Success',
+            'data'=> $buku
         ], 200);
     }
-    
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        $note = Note::find($id);
+        $buku = Buku::find($id);
 
-        if(!is_null($note)){
+        if(!is_null($buku)){
             return response([
-                'message' => 'Retrieve User Success',
-                'data' => $note
+                'message' => 'Retrieve Buku Success',
+                'data' => $buku
             ], 200);
         }
 
         return response([
-            'message' => 'User Not Found',
+            'message' => 'Buku Not Found',
             'data' => null
         ], 404);
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -83,11 +93,11 @@ class NoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $note = Note::find($id);
+        $buku = Buku::find($id);
 
-        if(is_null($note)){
+        if(is_null($buku)){
             return response([
-                'message' => 'Note Not Found',
+                'message' => 'Buku Not Found',
                 'data' => null
             ], 404);
         }
@@ -96,27 +106,35 @@ class NoteController extends Controller
 
         // $validate = Validator::make($updateData,
         $request->validate([
-            'title' => 'required',
-            'note' => 'required',
+            'judul' => 'required',
+            'penerbit' => 'required',
+            'tahunTerbit' => 'required',
+            'pengarang' => 'required',
+            'jumlahHalaman' => 'required|numeric|min:1',
+            'isbn' => 'required|min:13',
         ]);
 
         // if($validate->fails()){
         //     return response(['message' => $validate->errors()], 400);
         // }
 
-        $note->title = $updateData['title'];
-        $note->note = $updateData['note'];
+        $buku->judul = $updateData['judul'];
+        $buku->penerbit = $updateData['penerbit'];
+        $buku->tahunTerbit = $updateData['tahunTerbit'];
+        $buku->pengarang = $updateData['pengarang'];
+        $buku->jumlahHalaman = $updateData['jumlahHalaman'];
+        $buku->isbn = $updateData['isbn'];
 
-        if($note->save()){
+        if($buku->save()){
             return response([
-                'message' => 'Update Note Success',
-                'data' => $note
+                'message' => 'Update Buku Success',
+                'data' => $buku
             ], 200);
         }
 
 
         return response([
-            'message' => 'Update Note Failed',
+            'message' => 'Update Buku Failed',
             'data' => null
         ], 400);
     }
@@ -129,25 +147,24 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
-        $note = Note::find($id);
+        $buku = Buku::find($id);
 
-        if(is_null($note)){
+        if(is_null($buku)){
             return response([
-                'message' => 'Note Not Found',
+                'message' => 'Buku Not Found',
                 'data' => null
             ], 404);
         }
 
-        if($note->delete()){
+        if($buku->delete()){
             return response([
-                'message' => 'Delete Note Success',
-                'data' => $note
+                'message' => 'Delete Buku Success',
+                'data' => $buku
             ], 200);
         }
 
-
         return response([
-            'message' => 'Delete Note Failed',
+            'message' => 'Delete Buku Failed',
             'data' => null
         ], 400);
     }
