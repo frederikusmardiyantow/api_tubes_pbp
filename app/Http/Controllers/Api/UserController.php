@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -43,8 +44,8 @@ class UserController extends Controller
         // if($validate->fails())
         //     return response(['message' => $validate->errors()], 400);
         
-        // $user['password'] = bcrypt($request->password);
-        // $user['konfirmasiPassword'] = bcrypt($request->password);
+        $user['password'] = bcrypt($request->password);
+        $user['konfirmasiPassword'] = bcrypt($request->password);
 
         $user = User::create($user);
 
@@ -117,6 +118,29 @@ class UserController extends Controller
             'message' => 'Update user Failed',
             'data' => null
         ], 400);
+    }
+
+    public function login(Request $request){
+        $loginData = $request->all();
+
+        $validate = Validator::make($loginData, [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if($validate->fails())
+            return response(['message' => $validate->errors()], 400);
+        
+        if(!Auth::attempt($loginData))
+            return response(['message' => 'Invalid Credentials'], 401);
+
+        $user = Auth::user();
+
+        return response([
+            'message' => 'Authenticated',
+            'user' => $user,
+        ]);
+
     }
 
 }
