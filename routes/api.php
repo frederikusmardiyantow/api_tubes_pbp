@@ -45,6 +45,12 @@ Route::post('buku', 'Api\BukuController@store');
 Route::put('buku/{id}', 'Api\BukuController@update');
 Route::delete('buku/{id}', 'Api\BukuController@destroy');
 
+Route::get('mapel', 'Api\MataPelajaranController@index');
+Route::get('mapel/{id}', 'Api\MataPelajaranController@show');
+Route::post('mapel', 'Api\MataPelajaranController@store');
+Route::put('mapel/{id}', 'Api\MataPelajaranController@update');
+Route::delete('mapel/{id}', 'Api\MataPelajaranController@destroy');
+
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', 'Api\AuthController@logout');
 });
